@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f3f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .cart-wrapper {
+      display: flex;
+      max-width: 1200px;
+      margin: 30px auto;
+      gap: 20px;
+    }
+
+    .cart-items {
+      flex: 2;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .cart-summary {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    h2 {
+      color: #2874f0;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      text-align: left;
+      padding: 14px;
+      border-bottom: 1px solid #eee;
+    }
+
+    table th {
+      color: #555;
+    }
+
+    table td img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .product-name {
+      font-weight: 600;
+    }
+
+    .price {
+      color: green;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    .total-price {
+      font-weight: bold;
+      font-size: 18px;
+      color: #222;
+    }
+
+    .btn-order {
+      width: 100%;
+      padding: 12px;
+      background-color: #fb641b;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-order:hover {
+      background-color: #d75d1d;
+    }
+
+    .message {
+      color: #70b870;
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="/fragments/navbar::navbar"></div>
+
+<!-- 🛡️ Global CSRF Token for JavaScript -->
+<input type="hidden" id="csrf" th:value="${_csrf.token}" />
+
+<div class="cart-wrapper">
+
+  <!-- 🛒 Cart Items Section -->
+  <div class="cart-items">
+    <h2>Your Cart</h2>
+
+    <div th:if="${message}">
+      <p class="message" th:text="${message}"></p>
+    </div>
+
+    <table th:if="${cartItems}">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cart-item"
+            th:each="item : ${cartItems}"
+            th:attr="data-id=${item.id}, data-price=${item.product.price}, data-qty=${item.quantity}">
+          
+          <td><img th:src="'/images/' + ${item.product.imageUrl}" width="60" /></td>
+          <td th:text="${item.product.name}"></td>
+          <td>₹<span th:text="${item.product.price}"></span></td>
+
+          <!-- 🔁 Quantity Control (optional) -->
+          <td>
+            <form th:action="@{/cart/updateQuantity}" method="post" style="display:flex; align-items:center;">
+              <input type="hidden" th:name="cartItemId" th:value="${item.id}" />
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <button type="submit" name="action" value="decrease" style="padding:4px;">−</button>
+              <span style="margin: 0 8px;" th:text="${item.quantity}">1</span>
+              <button type="submit" name="action" value="increase" style="padding:4px;">+</button>
+            </form>
+          </td>
+
+          <td>₹<span class="item-total" th:text="${item.totalPrice}">0</span></td>
+
+          <!-- ❌ JS Delete Button -->
+          <td>
+            <button class="delete-btn"
+                    th:attr="data-id=${item.id}"
+                    style="color:red; border:none; background:none;">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 💰 Cart Summary Section -->
+  <div class="cart-summary">
+    <h2>Price Details</h2>
+
+    <div class="summary-row">
+      <span>Total Amount:</span>
+      <span class="total-price">₹<span class="total-price">
+    <span th:if="${cart != null}" th:text="${cart.totalprice != null ? '₹' + cart.totalprice : ''}"></span>
+    
+</span>
+      </span>
+    </div>
+
+   <form th:action="@{/order/getCheckoutPage}" method="get">
+  <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+  <button type="submit" class="btn-order">Place Order</button>
+</form>
+  </div>
+</div>
+
+<!-- ✅ JavaScript -->
+<script>
+  function calculateCartTotal() {
+    let total = 0;
+
+    document.querySelectorAll('.cart-item').forEach(row => {
+      const price = parseFloat(row.dataset.price);
+      const qty = parseInt(row.dataset.qty);
+      const itemTotal = price * qty;
+
+      row.querySelector('.item-total').innerText = itemTotal.toFixed(2);
+      total += itemTotal;
+    });
+
+    document.querySelector(".total-price span").innerText = total.toFixed(2);
+  }
+
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const id = this.dataset.id;
+      const row = this.closest('.cart-item');
+
+      fetch(`/cart/cartItems/deleteByid/${id}`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.getElementById('csrf').value
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          row.remove();
+          calculateCartTotal();
+        } else {
+          alert("Failed to delete item");
+        }
+      });
+    });
+  });
+
+  // 🔁 Initial calculation on page load
+  calculateCartTotal();
+</script>
+
+</body>
+</html>

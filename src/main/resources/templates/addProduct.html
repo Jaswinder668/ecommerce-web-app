@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/style.css">
+      
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+   <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+  
+       background: linear-gradient(to right, #2c3e50, #4ca1af);
+     
+    }
+
+  h2 {
+        text-align: center;
+       
+        color: #ffffff;
+            margin-bottom: 25px;
+    margin-top: 16px;
+    }
+
+    .add-product-form{
+        max-width: 600px;
+        margin: 0 auto;
+        background: #1e2a38;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+   .add-product-form input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: #2d3e50;
+        margin:5px;
+        color: #ffffff;
+        font-size: 14px;
+    }
+
+   .add-product-form input::placeholder {
+        color: #ccc;
+    }
+
+    select:invalid {
+        color: #888;
+    }
+
+   .add-product-form button[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    img {
+        margin-top: 10px;
+        border-radius: 8px;
+        box-shadow: 0 0 6px rgba(255,255,255,0.3);
+    }
+
+    h4 {
+        margin-top: 24px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color:whhite;
+        border-bottom: 1px solid #444;
+        padding-bottom: 5px;
+    }
+    .home-button {
+            display: inline-block;
+            background-color: #eee;
+            border-radius: 50%;
+                position: relative;
+    left: 45rem;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #000;
+            font-size: 18px;
+        }
+    
+</style>
+   
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+ 
+
+<h2>Add Product</h2>
+<a th:href="@{/admin/dashboard}" class="home-button" title="Back to Dashboard">
+        <i class="fas fa-home"></i>
+    </a>
+
+<form th:action="@{/product/add}" class="add-product-form" th:object="${product}" method="post" enctype="multipart/form-data">
+
+    <!-- Product Name -->
+    <div class="form-group">
+        <label>Product Name:</label>
+        <input type="text" th:field="*{name}" placeholder="Product Name" required/>
+    </div>
+
+    <!-- Price -->
+    <div class="form-group">
+        <label>Price:</label>
+        <input type="number" th:field="*{price}" placeholder="Price" required/>
+    </div>
+
+    <!-- Quantity -->
+    <div class="form-group">
+        <label>Stock:</label>
+        <input type="number" th:field="*{stock}" placeholder="stock" required />
+    </div>
+      <div class="form-group">
+        <label>Product Image:</label>
+           <input type="file" name="imageFile" accept="image/*" onchange="previewImage(event)" />
+
+    <!-- Preview image (newly selected or existing one) -->
+    <img id="imagePreview" 
+         th:src="@{'/images/' + *{imageUrl}}" 
+         width="150px" 
+         alt="Product Image" 
+         style="margin-top: 10px;" />
+</div>
+
+    <!-- Category Dropdown -->
+    <div class="form-group">
+        <label>Category:</label>
+        <select th:field="*{category.id}">
+            <option value="" disabled selected>Select Category</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.categoryTitle}">
+            </option>
+        </select>
+    </div>
+
+
+
+    <!-- Specification 1 -->
+    <h4>Specifications:</h4>
+
+   <div id="specifications-container">
+        <div th:each="spec, stat : *{specifications}">
+            <input type="text" th:field="*{specifications[__${stat.index}__].specKey}" placeholder="Specification Key" required/>
+            <input type="text" th:field="*{specifications[__${stat.index}__].specValue}" placeholder="Specification Value" required/>
+            <br>
+        </div>
+    </div>
+
+    <button type="button" onclick="addSpec()">+ Add More</button>
+
+    <br><br>
+    
+
+   
+
+    <button type="submit">Save Product</button>
+</form>
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+    }
+}
+
+
+
+let index = 1; // start from 1 because 0 is already in HTML
+
+function addSpec() {
+    const container = document.getElementById('specifications-container');
+
+    const div = document.createElement('div');
+    div.className = "spec-pair";
+    div.innerHTML = `
+        <input type="text" name="specifications[${index}].specKey" placeholder="Specification Key" required />
+        <input type="text" name="specifications[${index}].specValue" placeholder="Specification Value" required />
+        <button type="button" class="remove-btn" onclick="removeSpec(this)">X</button>
+    `;
+    container.appendChild(div);
+    index++;
+}
+
+function removeSpec(button) {
+    button.parentElement.remove();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Success</title>
+       <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #e8f6f3;
+            text-align: center;
+            padding: 60px;
+        }
+        .success-box {
+            background-color: #d1f2eb;
+            display: inline-block;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #117864;
+        }
+        p {
+            font-size: 18px;
+            color: #1a5276;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #148f77;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        a:hover {
+            background-color: #117a65;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+    <div class="success-box">
+        <h1>🎉 Order Placed Successfully!</h1>
+        <p>Your order has been received and is being processed.</p>
+        <a href="/order/myorders">View My Orders</a>
+    </div>
+</body>
+</html>

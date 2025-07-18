@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout Page</title>
+   <link rel="stylesheet" href="/style.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  
+  <style>
+    .checkout-container {
+    margin:26px 27px 18px 26px;
+
+    width:80%;
+    height:80%;
+      display: flex;
+      gap: 20px;
+    position: relative;
+    left: 104px;
+     
+    }
+     .login-info-box {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+
+  .login-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .step-number {
+    background-color: #f0f1f7;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    color: #2874f0;
+  }
+
+  .step-title {
+    text-transform: uppercase;
+  }
+
+  .step-check {
+    color: #2874f0;
+    font-weight: bold;
+  }
+
+  .login-user {
+    flex: 1;
+    text-align: left;
+    margin-left: 40px;
+    font-size: 15px;
+    color: #111;
+  }
+
+  .change-btn a {
+    color: #2874f0;
+    font-weight: bold;
+    text-decoration: none;
+    border: 1px solid #e0e0e0;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  .change-btn a:hover {
+    background-color: #f0f7ff;
+  }
+
+    .address-section {
+      flex: 3;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .price-section {
+      flex: 1;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      height: fit-content;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .address-card {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f9f9f9;
+    }
+
+    .address-card.active {
+      border-color: #2874f0;
+      background: #e7f0ff;
+    }
+
+    .address-card input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .error-msg {
+      color: red;
+      font-size: 14px;
+    }
+
+    .btn-deliver {
+      background-color: #fb641b;
+      color: white;
+     width: 269px;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .btn-deliver:hover {
+      background-color: #f65c11;
+    }
+
+    .price-section h3 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    .total {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .savings {
+      color: green;
+      margin-top: 10px;
+    }
+
+    .add-address {
+      color: #2874f0;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .step-box {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-content {
+  background: white;
+  padding: 15px 25px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  font-size: 14px;
+  border-top: none;
+  line-height: 1.8;
+}
+
+.step-number {
+  background-color: #f0f1f7;
+  color: #2874f0;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.step-title {
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+    
+
+  </style>
+</head>
+<body>
+<div th:replace="~{/fragments/navbar::navbar}"></div>
+
+
+<div class="checkout-container" >
+
+
+  <!-- LEFT: ADDRESS -->
+  <div class="address-section">
+  <!-- 🔒 Step 1: LOGIN Info Box -->
+<div class="login-info-box">
+  <div class="login-step">
+    <span class="step-number">1</span>
+    <span class="step-title">LOGIN</span>
+    <span class="step-check">✔</span>
+  </div>
+  <div class="login-user">
+    <strong th:text="${user.name}"></strong>&nbsp <span th:text="${user.phone}"></span>
+    
+  </div>
+</div>
+    <div class="section-title">2. DELIVERY ADDRESS</div>
+
+    <form  id="payment-form" action="/api/payment/payment-success" method="post">
+      <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+    
+    <input type="hidden" name="platformFee" id="platformFee">
+<input type="hidden" name="finalAmount" id="finalAmount">
+    
+ 
+      <div class="address-card active" th:each="address : ${listaddress}">
+        <label>
+          <input type="radio" name="id" th:value="${address.id}" checked />
+          <strong th:text="${address.name}">Jaswinder Singh</strong> &nbsp;  &nbsp; &nbsp;<span th:text="${address.phone}"></span><br>
+          <span th:text="${address.addressLine}"> Naina Devi, Himachal Pradesh </span> <b th:text="${address.pincode}">174310</b>
+          <button style="border:none;"><a th:href="@{/order/addressDeleteById/{id} (id=${address.id})}">&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-trash"></i></a></button>
+        </label>
+      </div>
+
+
+      
+
+      <a  class="add-address" th:href="@{/order/address}" >+ Add a new address</a>
+  
+    <!-- Step 3: ORDER SUMMARY -->
+<div class="step-box">
+  <span class="step-number">3</span>
+  <span class="step-title">ORDER SUMMARY</span>
+</div>
+
+<!-- Dummy content inside ORDER SUMMARY -->
+<div class="step-content" th:each="orderitem : ${orderItems}">
+<p>Product Image: &nbsp<img th:src="@{'/images/' + ${orderitem.product.imageUrl}}"  height="50px" width="50px" align="center" alt="Product Image" />
+</p>
+  <p>Product: &nbsp<span th:text="${orderitem.product.name}"></span></p>
+  <p >Qty: &nbsp<span th:text="${orderitem.quantity}"></span> </p>
+  <p>Price: &nbsp<span th:text="${orderitem.totalPrice}"></span></p>
+</div>
+
+<!-- Step 4: PAYMENT OPTIONS -->
+<div class="step-box">
+  <span class="step-number">4</span>
+  <span class="step-title">PAYMENT OPTIONS</span>
+</div>
+
+<!-- Dummy content inside PAYMENT OPTIONS -->
+<div class="step-content">
+  <label><input type="radio"  name="paymentMethod" value="Online"  checked>Online</label><br>
+
+</div>
+    
+  </div>
+  
+
+  <!-- RIGHT: PRICE DETAILS -->
+  <div class="price-section" >
+    <h3>PRICE DETAILS</h3>
+    <div class="price-row">
+      <span ></span>
+    </div>
+    <div class="price-row">
+    <span>Platform Fee</span>
+    <span>₹[[${platformFee}]]</span>
+</div>
+        <div class="price-row">
+      <span>Products TotalPrice</span>
+      <span th:text=${totalAmount} >2</span>
+        </div>
+    <hr>
+    <div class="price-row total">
+  <span th:text="${totalAmount+2.0}"></span>
+    </div>
+    <div class="savings">Your Total Savings on this order ₹749</div>
+          <input type="hidden" name="paymentMethod" value="RAZORPAY" />
+  <input type="hidden" name="razorpayPaymentId" id="razorpayPaymentId" />
+  <input type="hidden" name="addressId" id="addressId" />
+     <button type="button" id="rzp-button" class="btn-deliver">Pay-with-Razorpay</button>
+        </form>
+  </div>
+  
+
+</div>
+<script th:inline="javascript">
+    var baseAmount = '[[${totalAmount}]]'; // Cart total amount
+    var platformFee = 2; // Flat ₹2 fee
+    var finalAmount = parseFloat(baseAmount) + platformFee;
+
+    var options = {
+        "key": "rzp_test_cwnWcWmRatSZmn",
+        "amount": finalAmount * 100, // Razorpay needs paise
+        "currency": "INR",
+        "name": "Smart Cart",
+        "description": "Order Payment",
+        "handler": function (response) {
+            document.getElementById("razorpayPaymentId").value = response.razorpay_payment_id;
+
+            const selectedRadio = document.querySelector('input[name="id"]:checked');
+            document.getElementById("addressId").value = selectedRadio.value;
+
+            // ✅ Set platform fee and total amount in hidden inputs if needed
+            document.getElementById("platformFee").value = platformFee;
+            document.getElementById("finalAmount").value = finalAmount;
+
+            document.getElementById("payment-form").submit();
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    document.getElementById("rzp-button").onclick = function (e) {
+        rzp.open();
+        e.preventDefault();
+    };
+</script>
+
+
+
+</body>
+</html>
