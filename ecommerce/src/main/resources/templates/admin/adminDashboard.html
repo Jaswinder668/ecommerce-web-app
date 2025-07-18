@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+       
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: white;
+           
+        }
+
+        .admin-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top:82px;
+            background-color: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #000;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-link {
+            display: block;
+            background-color: #1abc9c;
+            color: white;
+            padding: 12px;
+            margin: 10px 0;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .admin-link:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+  <div th:replace="fragments/navbar::navbar"></div>
+
+<div class="admin-container">
+    <h2>Admin Dashboard</h2>
+
+    <a th:href="@{/product/showProductPage}" class="admin-link">Add Product</a>
+    <a th:href="@{/admin/add-category}" class="admin-link">Add Category</a>
+    <a th:href="@{/admin/manage_orders}" class="admin-link">Manage Orders</a>
+    <a th:href="@{/admin/getAllUsers}" class="admin-link">Show All Users</a>
+       <a th:href="@{/admin/showAllproducts}" class="admin-link">Show All Products</a>
+     <a th:href="@{/logout}" class="admin-link">Logout</a>
+
+</div>
+
+</body>
+</html>

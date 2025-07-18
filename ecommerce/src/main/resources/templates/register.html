@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce Site</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+    <div class="container">
+        <div class="container-1">
+            <img src="/images/vectorFormImage.jpg" alt="umage">
+        </div>
+        <form th:action="@{/register}"  th:object="${user}" method="post" >
+            <div class="From-heading">
+            <h3>Register</h3>
+            </div>
+           <input type="text" th:field="*{name}" placeholder="Username" required />
+    <input type="email" th:field="*{email}" placeholder="Email" required />
+        <p class="error-message" th:if="${userExist}" th:text="${userExist}"></p>
+            <input type="tel" th:field="*{phone}" placeholder="Phone-number" required />
+    <input type="password" th:field="*{password}" placeholder="Password" required />
+<p  class="error-message"th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></p>
+ <p class="error-message" th:if="${passwordMatch}" th:text="${passwordMatch}"></p>
+
+    <input type="password" th:field="*{confirmPassword}" placeholder="Confirm Password" required />
+            <button type="submit" class="submit-button">Sign Up</button>
+            <span>Have a Member? <a href="/login">Login here</a></span>
+    </form>
+       </div>
+    
+</body>
+</html>

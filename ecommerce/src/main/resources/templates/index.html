@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        
+        <title>ECommerce site</title>
+        <link rel="stylesheet" href="/style.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      </head>
+      
+<body>
+   <div th:replace="fragments/navbar::navbar"></div>
+<div class="banner-section">
+
+<img src="/images/Banner1.jpg" alt="banner.jpg" height="100%" width="100%">
+ <div class="banner-text">
+    <h1>Big Sale is Live Now!</h1>
+    <p>Up to 70% Off on Electronics, Fashion & More</p>
+  </div>
+
+</div>
+
+   <main th:each="cat : ${category}">
+
+    <!-- Category Title -->
+    <div class="heading-category" th:text="${cat.categoryTitle}"></div>
+
+    <!-- Product Section -->
+    <div class="products-wrapper">
+
+        <div class="item" th:each="p : ${cat.product}">
+            <a th:href="@{/product/getproductbyid/{id}(id=${p.id})}">
+                <img th:src="'/images/'+${p.imageUrl}" alt="Product Image" />
+            </a>
+            <p class="P-items" th:text="${p.name}">Product Name</p>
+            <p class="P-price" th:text="'₹' + ${p.price}">Price</p>
+            <div class="add-to-cart-product">
+            <form th:action="@{/cart/add/cart/{productid}(productid=${p.id})}" method="post">
+                <!-- CSRF Token for Spring Security -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                
+                <!-- Default quantity = 1 -->
+                <input type="hidden" name="quantity" value="1" />
+                
+                <!-- Styled like a link if you want -->
+                <button type="submit" class="btn-link">Add To Cart</button>
+            </form>
+        </div>
+        </div>
+
+    </div>
+</main>
+<div th:replace="fragments/footer :: footer"></div>
+
+
+<script>
+function addToCart(productId) {
+	  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+	  const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+	  fetch('/add/cart/' + productId, {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/x-www-form-urlencoded',
+	      [csrfHeader]: csrfToken
+	    },
+	    body: 'quantity=1'
+	  }).then(() => {
+	    alert("Added to cart!");
+	    location.reload();
+	  });
+	}
+</script>
+
+   
+  </body>
+  
+</html>

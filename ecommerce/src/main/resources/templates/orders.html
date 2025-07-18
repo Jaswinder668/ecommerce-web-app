@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Orders</title>
+      <link rel="stylesheet" href="/style.css">
+
+  
+    
+    <style>
+   
+       
+        .orders-container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .order-card {
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+          
+            position: relative;
+        }
+
+        .order-header {
+            font-weight: bold;
+            background-color: #1976d2;
+            color: white;
+            padding: 6px 12px;
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .order-content {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .product-info img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+
+        .product-details {
+            font-size: 14px;
+        }
+
+        .product-details .name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .order-meta {
+            text-align: right;
+            font-size: 14px;
+
+        }
+
+        .order-meta .total {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .actions button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .actions button.cancel {
+            background-color: #d32f2f;
+        }
+        .badge {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Custom Status Colors */
+.bg-warning { background-color: #ffc107; color: #212529; }
+.bg-success { background-color: #28a745; color: #fff; }
+.bg-danger { background-color: #dc3545; color: #fff; }
+.bg-primary { background-color: #007bff; color: #fff; }
+.bg-secondary { background-color: #6c757d; color: #fff; }
+
+        .order-footer {
+            font-size: 13px;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"></div>
+
+    <!-- Flash Messages -->
+    <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+    
+<div class="orders-container">
+    <h2>My Orders</h2>
+
+    <div th:if="${orders != null and !orders.isEmpty()}">
+        <div th:each="order : ${orders}" class="order-card">
+
+            <div class="order-header">
+                <span th:text="'ORDER ID: ' + ${order.id}"></span>
+            </div>
+
+            <div class="order-content">
+                <div class="product-info" th:each="item : ${order.items}">
+         <img th:src="@{'/images/'+ ${item.product.imageUrl}}" onerror="this.src='/images/default.png'">
+         
+            
+                
+                    <div class="product-details">
+                        <div class="name" th:text="${item.product.name}"></div>
+                        <div>Qty: <span th:text="${item.quantity}"></span></div>
+                    </div>
+                </div>
+
+                <div class="order-meta">
+                    <div>₹<span th:text="${order.totalAmount}"></span></div>
+                    <div th:text="'Delivered on ' + ${#temporals.format(order.localDateTime.plusDays(3), 'E, MMM dd yyyy')}"></div>
+                                    <div>Order Status:&nbsp <span class="badge"
+          th:classappend=" 
+              ${order.status.name() == 'PLACED'} ? ' bg-warning text-dark' :
+              (${order.status.name() == 'DELIVERED'} ? ' bg-success' :
+              (${order.status.name() == 'CANCELLED'} ? ' bg-danger' :
+              (${order.status.name() == 'SHIPPED'} ? ' bg-primary' : ' bg-secondary')))">
+        <span th:text="${order.status.name()}">Status</span>
+    </span></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button>Track</button>
+   <a th:if="${order.status != 'DELIVERED' and order.status != 'OUT_FOR_DELIVERY'}"
+   th:href="@{/order/cancel/{id}(id=${order.id})}"
+   class="btn btn-danger">
+   Cancel
+</a>
+   
+            
+            </div>
+
+            <div class="order-footer">
+                Ordered On <strong th:text="${#temporals.format(order.localDateTime, 'E, MMM dd yyyy')}"></strong>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:if="${orders == null or orders.isEmpty()}">
+        <p>No orders found.</p>
+    </div>
+</div>
+</body>
+</html>

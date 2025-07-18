@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Orders - Admin</title>
+    
+    <!-- Only your custom CSS -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Font Awesome (optional, if you still want icons) -->
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <style>
+ 
+
+.container {
+    display: block;
+    width: 90%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.home-button {
+    display: inline-block;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #000;
+    font-size: 18px;
+}
+
+.title {
+    text-align: center;
+    font-size:25px;
+    margin-bottom: 20px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  
+    padding: 12px;
+    text-align: center;
+}
+
+.custom-table th {
+    background-color: #333;
+    color: #fff;
+}
+
+.status-dropdown {
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid rgba(216, 44, 44, 0.2);
+    font-size: 14px;
+}
+
+/* Status Badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.badge.placed {
+    background-color: orange;
+    color: black;
+}
+
+.badge.delivered {
+    background-color: green;
+}
+
+.badge.cancelled {
+    background-color: red;
+}
+
+.badge.shipped {
+    background-color: blue;
+}
+
+.badge.other {
+    background-color: gray;
+}
+    
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar::navbar"></div>
+
+<div class="container">
+
+    <a th:href="@{/admin/dashboard}" class="home-button" title="Back to Dashboard">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <h3 class="title">📦 Manage All Orders</h3>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Order Date</th>
+                <th>Total Amount</th>
+             
+                <th>Actions</th>
+                  <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${ordersList}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.user?.name}">Unknown</td>
+                <td th:text="${#temporals.format(order.localDateTime, 'dd-MM-yyyy HH:mm')}"></td>
+                <td>₹<span th:text="${order.totalAmount}"></span></td>
+
+                <td>
+                    <form th:action="@{/admin/orders/update-status}" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.id}" />
+                        <select name="status" class="status-dropdown" onchange="this.form.submit()">
+                            <option th:each="s : ${T(com.in.ecommerce.enums.OrderStatus).values()}"
+                                    th:value="${s}"
+                                    th:text="${s}"
+                                    th:selected="${order.status != null} ? ${s.name() == order.status.name()} : false">
+                            </option>
+                        </select>
+                    </form>
+                </td>
+
+                <td>
+                    <span class="badge"
+                          th:classappend=" 
+                              ${order.status.name() == 'PLACED'} ? ' placed' :
+                              (${order.status.name() == 'DELIVERED'} ? ' delivered' :
+                              (${order.status.name() == 'CANCELLED'} ? ' cancelled' :
+                              (${order.status.name() == 'SHIPPED'} ? ' shipped' : ' other')))">
+                        <span th:text="${order.status.name()}">Status</span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin - View Users</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        
+
+        h2 {
+            text-align: center;
+            color: #2d3436;
+            margin-top: 20px;
+        }
+
+        .home-button {
+            display: inline-block;
+            background-color: #dfe6e9;
+            border-radius: 50%;
+            padding: 10px 12px;
+            margin: 20px;
+            text-decoration: none;
+            color: #2d3436;
+            font-size: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #b2bec3;
+        }
+
+        .container-show-users {
+            padding: 0 5%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #0984e3;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            color: #2d3436;
+        }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            th {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            td {
+                position: relative;
+                padding-left: 50%;
+                border: none;
+                border-bottom: 1px solid #eee;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                top: 12px;
+                font-weight: bold;
+                color: #636e72;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div th:replace="fragments/navbar::navbar"></div>
+
+    <a th:href="@{/admin/dashboard}" class="home-button" title="Back to Dashboard">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <h2>Registered Users</h2>
+
+    <div class="container-show-users">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}" data-label="User ID">1</td>
+                    <td th:text="${user.name}" data-label="Name">Jaswinder</td>
+                    <td th:text="${user.email}" data-label="Email">abc@example.com</td>
+                    <td th:text="${user.phone}" data-label="Phone">9999999999</td>
+                    <td th:text="${user.roles}" data-label="Role">ROLE_USER</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
