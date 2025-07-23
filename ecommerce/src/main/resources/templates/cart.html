@@ -156,7 +156,7 @@
           <td>
             <button class="delete-btn"
                     th:attr="data-id=${item.id}"
-                    style="color:red; border:none; background:none;">🗑️</button>
+                    style="color:red; border:none; font-size:18px; background:none;">🗑️</button>
           </td>
         </tr>
       </tbody>
@@ -186,6 +186,7 @@
 
 <!-- ✅ JavaScript -->
 <script>
+       
   function calculateCartTotal() {
     let total = 0;
 
@@ -226,6 +227,10 @@
 
   // 🔁 Initial calculation on page load
   calculateCartTotal();
+
+</script>
+<script th:if="${emptyCart}" th:inline="javascript">
+  alert([[${emptyCart}]]);
 </script>
 
 </body>

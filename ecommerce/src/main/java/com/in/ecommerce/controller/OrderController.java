@@ -124,11 +124,18 @@ public class OrderController {
 
 
     @GetMapping("/getCheckoutPage")
-    public String checkoutPage(Model model,Principal principal) {
+    public String checkoutPage(Model model,Principal principal,RedirectAttributes redirectAttributes) {
     	   User user = userRepository.findByEmail(principal.getName()).orElseThrow();
     	// 1. Fetch user's cart
-   	    Cart cart = cartRepository.findByUser(user)
-   	                 .orElseThrow(() -> new RuntimeException("Cart not found"));
+    	   Optional<Cart> optionalCart = cartRepository.findByUser(user);
+    	   System.out.println("Cart: " + optionalCart);
+
+    	   if (!optionalCart.isPresent()||optionalCart.get().getCartItems().isEmpty()) {
+    		   System.out.println("Cart is empty. Redirecting...");
+    	       redirectAttributes.addFlashAttribute("emptyCart", "Cart not found. Please add items first.");
+    	       return "redirect:/cart/cartPage";
+    	   }
+    	   Cart cart=optionalCart.get();
         
 
            // Convert CartItems → Temp OrderItems for view only
