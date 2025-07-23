@@ -20,7 +20,7 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
+	@Column(name = "total_price", nullable = false)
 	private Double totalprice = 0.0;
 
 

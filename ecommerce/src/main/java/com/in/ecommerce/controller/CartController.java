@@ -1,6 +1,7 @@
 package com.in.ecommerce.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,11 @@ public class CartController {
 	    	
 	    	Cart cart=user.getCart();
 	    	if(cart==null) {
-	    		cart=new Cart();
-	    		cart.setUser(user);
-	    		user.setCart(cart);
+	    		 cart = new Cart();
+	    		    cart.setUser(user);
+	    		    cart.setCartItems(new ArrayList<>()); // ✅ Important: avoid null pointer
+	    		    cart.setTotalprice(0.0);              // ✅ Always initialize
+	    		    user.setCart(cart);
 	    		
 	    	}
 	    	
@@ -85,10 +88,6 @@ public class CartController {
 	    	// ✅ Add platform fee
 	    
 	    	cart.setTotalprice(total);
-	    	
-	    	
-
-	    
 	    	cartRepository.save(cart);
 	        redirectAttributes.addFlashAttribute("message", "Add Product to Cart successfully!");
 	    	

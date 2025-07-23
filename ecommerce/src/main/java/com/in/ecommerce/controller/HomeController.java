@@ -31,17 +31,22 @@ public class HomeController {
 	@GetMapping("/")
 	public String index_Page(Model model) {
 		List<Category> list = categoryRepository.findAllWithProducts();
-		System.out.print(list);
 	    model.addAttribute("category", list); // ✅ Key is "category"
 	    return "index";
 	}
 	@GetMapping("/index")
 	public String indexPage(Model model) {
 		List<Category> list = categoryRepository.findAllWithProducts();
-		System.out.print(list);
+	
 	    model.addAttribute("category", list); // ✅ Key is "category"
 	    return "index";
 	}
+	
+	@GetMapping("/help")
+	public String helpPage() {
+	    return "help";
+	}
+
 	    
 
 }

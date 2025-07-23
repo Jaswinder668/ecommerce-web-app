@@ -56,16 +56,30 @@ public class ProductController {
 	@GetMapping("/getproductbyid/{id}")
 	public String getById(@PathVariable Long id,Model model) {
 		Product product= productService.productGetByID(id);
-		model.addAttribute("product", product);
+		 // Get related products from same category
+	    List<Product> relatedProducts = productRepository.findTop4ByCategoryAndIdNot(product.getCategory(), product.getId());
+
+	    model.addAttribute("product", product);
+	    model.addAttribute("relatedProducts", relatedProducts);
 		model.addAttribute("specification", product.getSpecifications());
 		
-		return "productDetails";
+	
+		
+		return "Single_product";
 	}
 	
+	  @GetMapping("/search")
+	    public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
+	        List<Product> result = productService.searchProducts(keyword);
+	       
+	        model.addAttribute("products", result);
+	        model.addAttribute("keyword", keyword);
+	        return "productDetails";  // Thymeleaf HTML page
+	    }
 	
 	
 	 @GetMapping("/showProductPage")
-	   public String addProductPage(Model model) {
+	   public String addProductOnIndexPageByCategory(Model model) {
 		   
 		   Product p=new Product();
 		   model.addAttribute("product", p);
@@ -77,13 +91,8 @@ public class ProductController {
 		   
 		   return "addProduct";
 	   }
-	 @GetMapping("/search")
-	  @ResponseBody
-	    public String searchProducts(@RequestParam("query") String query,Model model) {
-	        List<Product> products= productRepository.findByNameContainingIgnoreCase(query);
-	        model.addAttribute("products", products);
-			return "productDetails";
-	    }
+	
+	
 
 	
 	

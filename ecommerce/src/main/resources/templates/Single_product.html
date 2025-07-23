@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product details</title>
+    
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+    
+      
+    /* Product Description */
+.product-description {
+      background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 0px 13px 0px 13px;
+}
+
+.product-description h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.product-description p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Full Specifications */
+
+.product-specifications {
+      background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 0px 13px 0px 13px;
+}
+
+.product-specifications h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.product-specifications ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.product-specifications li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #444;
+}
+@media screen and (max-width: 600px) {
+    .product-description,
+    .product-specifications {
+        padding: 15px;
+    }
+
+    .product-description h3,
+    .product-specifications h3 {
+        font-size: 18px;
+    }
+}
+
+    
+   .related-products {
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.related-product-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.related-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 238px;
+    transition: box-shadow 0.3s ease;
+}
+
+.related-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.related-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 10px;
+}
+
+.image-wrapper {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-info {
+    padding-top: 8px;
+}
+
+.product-name {
+    font-weight: 500;
+    font-size: 14px;
+    height: 30px;
+    overflow: hidden;
+    color: #212121;
+}
+.product-brand-name{
+   font-weight: 500;
+    font-size: 14px;
+   
+    color: #212121;
+
+}
+
+.price-section {
+    margin-top: 6px;
+}
+
+.price {
+    font-weight: bold;
+    color: #212121;
+    margin-right: 6px;
+}
+
+.mrp {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 6px;
+    font-size: 13px;
+}
+
+.discount {
+    color: green;
+    font-size: 13px;
+}
+
+.rating-section {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #555;
+}
+
+.rating {
+    background-color: #388e3c;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.reviews {
+    margin-left: 4px;
+}
+
+.bank-offer {
+    display: block;
+    margin-top: 5px;
+    color: green;
+    font-weight: 500;
+    font-size: 13px;
+}
+   
+    
+    </style>
+</head>
+<body>
+
+<!-- Navbar Fragment -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+
+
+
+
+<!-- Product Cards -->
+<div class="product-details-div" th:each="product : ${product}">
+    <div class="product-card" th:object="${product}">
+
+        <!-- Product Image -->
+        <a class="product-image" href="#">
+            <img th:src="@{'/images/' + *{imageUrl}}" alt="Product Image" />
+        </a>
+
+        <!-- Product Name & Specifications -->
+        <div class="product-specification">
+            <div class="product-name" th:text="*{name}">Product Name</div>
+             <p class="product-brand-name" >Brand Name: <span th:text="${product.brand}"></span></p><br>
+            <ul class="product-accessories-details">
+                <li th:each="spec : *{specifications}"
+                    th:if="${spec.specKey != null and spec.specValue != null}"
+                    th:text="${spec.specKey + ': ' + spec.specValue}">
+                </li>
+            </ul>
+        </div>
+
+        <!-- Product Price and Buttons -->
+        <div class="product-price-div">
+            <div class="price" th:text="${product.price}">₹24,999</div>
+            <div class="original-price"><del th:text="${product.mrp}">₹27,999</del></div>
+            <span class="discount" ><span th:text="${product.discount}"></span>% off</span>
+
+            <!-- Add to Cart -->
+            <div class="add-to-cart-product">
+                <form th:action="@{/cart/add/cart/{productid}(productid=*{id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn-link">Add To Cart</button>
+                </form>
+            </div>
+
+            <!-- Buy Now -->
+            <div class="add-to-cart-product">
+                <form th:action="@{/cart/add/cart/{productid}(productid=*{id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn-link">Buy Now</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+<!-- Product Description -->
+<div class="product-description" th:each="product: ${product}">
+    <h3>Product Description</h3>
+    <p th:if=${product.description} th:text="${product.description}">This is a detailed description of the product.</p>
+</div>
+
+<!-- Full Specifications -->
+<div class="product-specifications">
+    <h3>Full Specifications</h3>
+    <ul>
+        <li th:each="spec : ${specification}" 
+            th:text="${spec.specKey + ' : ' + spec.specValue}">Specification item</li>
+    </ul>
+</div>
+
+
+
+<!-- Related Products Section -->
+<div class="related-products">
+    <h3 class="section-title">You May Also Like</h3>
+    <div class="related-product-grid">
+        <div class="related-card" th:each="p : ${relatedProducts}">
+            <a th:href="@{/product/getproductbyid/{id}(id=${p.id})}">
+                <div class="image-wrapper">
+                    <img th:src="@{'/images/' + ${p.imageUrl}}" alt="Related Product">
+                </div>
+                <div class="product-info">
+                    <p class="product-name" th:text="${p.name}">Product Name</p>
+                      <p class="product-brand-name" >Brand Name<span th:text="${p.brand}"></span></p>
+                    <div class="price-section">
+                        <span class="price" th:text="'₹' + ${p.price}">₹799</span>
+                        <span class="mrp" th:if=${p.mrp} th:text="'₹' + ${p.mrp}">₹2999</span>
+                        <span class="discount" th:text="${p.discount + '% off'}">73% off</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+
+
+</body>
+</html>

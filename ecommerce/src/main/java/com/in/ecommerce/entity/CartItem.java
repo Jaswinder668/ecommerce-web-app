@@ -12,7 +12,7 @@ public class CartItem {
 
     private int quantity;
 
-    private double totalprice=0.0;
+    private Double totalprice=0.0;
 
     // 🔗 ManyToOne with Product
     @ManyToOne

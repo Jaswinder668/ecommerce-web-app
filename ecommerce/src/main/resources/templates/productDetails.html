@@ -2,70 +2,121 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Page</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        
 
+        h2 {
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 5px;
+            margin:0px 35px 28px 35px;
+        }
+
+        .search-product-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+     .search-product-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .search-product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .search-product-cardh3 {
+            font-size: 18px;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+       .search-product-card p {
+            font-size: 14px;
+            margin: 5px 0;
+            color: #636e72;
+        }
+
+      .search-product-card .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+      .search-product-card  .buttons form button,
+        .buttons a {
+            background-color: #0984e3;
+            border: none;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .buttons form button:hover,
+        .buttons a:hover {
+            background-color: #74b9ff;
+        }
+
+ .no-results {
+            color: #d63031;
+            font-size: 16px;
+            margin-top: 30px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="fragments/navbar::navbar"></div>
 
-    <div class="product-details-div">
-        <div class="product-card" th:object="${product}">
-            <!-- Product Image -->
-            <a href="#" class="product-image">
-        <img th:src="'/images/'+*{imageUrl}" alt="test image">
-   
-        
-        
-            </a>
-               
+    <h2>Search Results for "<span th:text="${keyword}"></span>"</h2>
 
-            <!-- Product Details -->
-            <a href="#" class="product-specification">
-                <div class="product-name" th:text="*{name}">Product Name</div>
-                <div class="product-accessories-details">
-                  <ul>
-   <li th:each="spec : *{specifications}"
-    class="product-accessories-details-list-item"
-    th:if="${spec.specKey != null and spec.specValue != null}"
-    th:text="${spec.specKey + ': ' + spec.specValue}">
-   
-</li>
+    <div th:if="${#lists.isEmpty(products)}" class="no-results">
+        No products found for "<span th:text="${keyword}"></span>".
+    </div>
 
-   
-               </ul>
-                  
-                </div>
-            </a>
+    <div class="search-grid" th:if="${!#lists.isEmpty(products)}">
+        <div class="search-product-card" th:each="product : ${products}">
+            <img th:src="@{'/images/' + ${product.imageUrl}}" th:alt="${product.name}" />
 
-            <!-- Product Price and Buttons -->
-            <div class="product-price-div">
-                <div class="price" th:text="*{price*9/10}">₹24,999</div>
-                <div class="original-price"><del th:text="*{price}">₹27,999</del></div>
-                <span class="discount" >10% off</span>
-                  <div class="add-to-cart-product">
-            <form th:action="@{/cart/add/cart/{productid}(productid=*{id})}" method="post">
-                <!-- CSRF Token for Spring Security -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <!-- Default quantity = 1 -->
-                <input type="hidden" name="quantity" value="1" />
-                <!-- Styled like a link if you want -->
-                <button type="submit" class="btn-link">Add To Cart</button>
-            </form>
-        </div>
-                     <div class="add-to-cart-product">
-            <form th:action="@{/cart/add/cart/{productid}(productid=*{id})}" method="post">
-                <!-- CSRF Token for Spring Security -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <input type="hidden" name="quantity" value="1" />
-                <button type="submit" class="btn-link">Buy Now</button>
-            </form>
-        </div>
-                
+            <h3 th:text="${product.name}">Product Name</h3>
+            <p>Brand: <span th:text="${product.brand}">Brand</span></p>
+            <p>₹ <span th:text="${product.price}">Price</span></p>
+
+            <div class="buttons">
+                <form th:action="@{/cart/add/cart/{productid}(productid=${product.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit">Add to Cart</button>
+                </form>
+                <a th:href="@{'/buy/' + ${product.id}}">Buy Now</a>
             </div>
         </div>
     </div>
+<div th:replace="fragments/footer :: footer"></div>
+
 </body>
 </html>

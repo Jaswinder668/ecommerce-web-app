@@ -1,14 +1,18 @@
 
+	@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
 /* General Reset */
 * {
+
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
+    
   body {
     font-family: 'Segoe UI', sans-serif;
    background-color:   rgba(241,242,244,1.00) ;/* Dark background without gradient */
     color: black;
+   
      opacity: 0;
     transition: opacity 0.4s ease-in;
   }
@@ -42,7 +46,7 @@
   .navbar-left {
     display: flex;
     align-items: center;
-    gap: 136px;
+    gap: 80px;
   }
   
   /* Search Bar Styling */
@@ -135,7 +139,7 @@
   }
   
   .cart-icon::after {
-    content: "(0)";
+  
     position: absolute;
    top: -13px;
     right: -18px;
@@ -254,6 +258,16 @@
   ------------------------------------------------------------------------------------------------------------------------------------------------
   ----------------------------------------index.html footer---------------------------------------------------------------------------------
   ----------------------------------------------------------------------------------------------------------------------------------------*/
+   html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex: 1; /* ye content ko pura vertical space dega */
+        }
 .footer {
   background-color: #1a1a1a;
   color: #ffffff;
@@ -359,7 +373,7 @@
       text-decoration: none;
    color: #2874f0;
   }
- .container form input[type="text"],input[type="email"],input[type="password"],.submit-button{
+ .container form input[type="text"],input[type="email"],input[type="password"],input[type="tel"],.submit-button{
     height: 37px;
     width: 90%;
     border: none;
@@ -396,14 +410,15 @@
         .product-details-div {
          background-color: white;
             display: flex;
-       
-            margin:13px 13px 7px 13px;
+            margin:13px 13px 4px 13px;
             align-self: center;
+            width:98%
         }
 
         .product-card {
             display: flex;
             gap: 5px;
+            background-color:white;
             width: 100%;
             height: 308px;
             padding: 5px;

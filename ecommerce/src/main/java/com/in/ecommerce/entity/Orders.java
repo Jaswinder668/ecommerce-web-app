@@ -28,7 +28,8 @@ public class Orders {
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<OrderItems> items = new ArrayList<>();
+    private List<OrderItems> items;
+
 
     @ManyToOne
     @JoinColumn(name="user_id")

@@ -2,12 +2,12 @@
 <nav class="navbar" th:fragment="navbar">
   <div class="navbar-left">
     <!-- Logo -->
-    <a href="/" class="navbar-logo">ShopVibe</a>
+   <i class="fa-solid fa-bag-shopping" style="color: #63E6BE;font-size:36px;position: relative;left: 72px;"></i> <a href="/" class="navbar-logo">ShopVibe</a>
 
     <!-- Search Bar -->
   
-      <form th:action="@{/products/search}" method="get" class="navbar-search">
-    <input type="text" name="query" placeholder="Search products..." />
+      <form th:action="@{/product/search}" method="get" class="navbar-search">
+    <input type="text" name="keyword" placeholder="Search products..." />
     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
 </form>
     
@@ -30,16 +30,10 @@
         </ul>
       </li>
 
-      <!-- Cart -->
-      <li><a th:href="@{/cart/cartPage}" class="cart-icon">Cart</a></li>
+
 
       <!-- Help -->
       <li><a href="/help">Help</a></li>
-
-      <!-- Offers -->
-      <li><a href="/offers">Offers</a></li>
-
-      <!-- Account Dropdown -->
       <li class="dropdown">
         <a href="#" class="dropdown-toggle">Account</a>
         <ul class="dropdown-menu">
@@ -48,6 +42,14 @@
           <li><a href="/order/myorders">MyOrder</a></li>
         </ul>
       </li>
+        <li><a th:href="@{/login}">Login</a></li>
+
+
+
+      <!-- Account Dropdown -->
+      
+         <!-- Cart -->
+      <li><a th:href="@{/cart/cartPage}" class="cart-icon"><i class="fa-solid fa-cart-shopping" style="font-size:18px;"></i>&nbsp;cart</a></li>
     </ul>
   </div>
 <script>

@@ -9,14 +9,12 @@
   
   <style>
     .checkout-container {
-    margin:26px 27px 18px 26px;
-
-    width:80%;
-    height:80%;
+ padding:12px 12px 30px 12px;
+    width: 100%;
+    height: 100%;
       display: flex;
       gap: 20px;
-    position: relative;
-    left: 104px;
+   
      
     }
      .login-info-box {
@@ -107,7 +105,7 @@
     }
 
     .address-card.active {
-      border-color: #2874f0;
+    
       background: #e7f0ff;
     }
 
@@ -223,25 +221,18 @@
     <span class="step-check">✔</span>
   </div>
   <div class="login-user">
-    <strong th:text="${user.name}"></strong>&nbsp <span th:text="${user.phone}"></span>
+    <strong th:text="${user.name}"></strong>&nbsp; <span th:text="${user.phone}"></span>
     
   </div>
 </div>
     <div class="section-title">2. DELIVERY ADDRESS</div>
-
-    <form  id="payment-form" action="/api/payment/payment-success" method="post">
-      <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     
-    <input type="hidden" name="platformFee" id="platformFee">
-<input type="hidden" name="finalAmount" id="finalAmount">
-    
- 
       <div class="address-card active" th:each="address : ${listaddress}">
         <label>
           <input type="radio" name="id" th:value="${address.id}" checked />
           <strong th:text="${address.name}">Jaswinder Singh</strong> &nbsp;  &nbsp; &nbsp;<span th:text="${address.phone}"></span><br>
           <span th:text="${address.addressLine}"> Naina Devi, Himachal Pradesh </span> <b th:text="${address.pincode}">174310</b>
-          <button style="border:none;"><a th:href="@{/order/addressDeleteById/{id} (id=${address.id})}">&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-trash"></i></a></button>
+          <button style="border:none;"><a th:href="@{/order/addressDeleteById/{id}(id=${address.id})}">&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-trash"></i></a></button>
         </label>
       </div>
 
@@ -264,7 +255,11 @@
   <p >Qty: &nbsp<span th:text="${orderitem.quantity}"></span> </p>
   <p>Price: &nbsp<span th:text="${orderitem.totalPrice}"></span></p>
 </div>
-
+    <form  id="payment-form" action="/api/payment/payment-success" method="post">
+      <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+    
+    <input type="hidden" name="platformFee" id="platformFee">
+<input type="hidden" name="finalAmount" id="finalAmount">
 <!-- Step 4: PAYMENT OPTIONS -->
 <div class="step-box">
   <span class="step-number">4</span>
@@ -288,7 +283,7 @@
     </div>
     <div class="price-row">
     <span>Platform Fee</span>
-    <span>₹[[${platformFee}]]</span>
+    <span>₹2</span>
 </div>
         <div class="price-row">
       <span>Products TotalPrice</span>
@@ -302,12 +297,13 @@
           <input type="hidden" name="paymentMethod" value="RAZORPAY" />
   <input type="hidden" name="razorpayPaymentId" id="razorpayPaymentId" />
   <input type="hidden" name="addressId" id="addressId" />
-     <button type="button" id="rzp-button" class="btn-deliver">Pay-with-Razorpay</button>
+     <button type="button" id="rzp-button" class="btn-deliver">Place Order</button>
         </form>
   </div>
   
 
 </div>
+<div th:replace="fragments/footer :: footer"></div>
 <script th:inline="javascript">
     var baseAmount = '[[${totalAmount}]]'; // Cart total amount
     var platformFee = 2; // Flat ₹2 fee

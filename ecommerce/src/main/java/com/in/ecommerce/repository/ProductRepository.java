@@ -16,8 +16,11 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
 
 
-	// If you want to search by product name:
-	List<Product> findByNameContainingIgnoreCase(String name);
+	 List<Product> findByNameContainingIgnoreCase(String keyword);
+	  // Related products from same category, excluding current product
+	    List<Product> findTop4ByCategoryAndIdNot(Category category, Long id);
+	    List<Product> findTop4ByCategory(Category category);
+	    
 
 
 

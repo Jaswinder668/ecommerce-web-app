@@ -128,12 +128,26 @@
         <label>Product Name:</label>
         <input type="text" th:field="*{name}" placeholder="Product Name" required/>
     </div>
+     <div class="form-group">
+         <label>Brand:</label>
+      <input type="text" th:field="*{brand}" placeholder="Brand name" required />
+      </div>
+    
+        <div class="form-group">
+         <label>MRP:</label>
+      <input type="number" th:field="*{mrp}" placeholder="MRP" required />
+      </div>
+
 
     <!-- Price -->
     <div class="form-group">
         <label>Price:</label>
         <input type="number" th:field="*{price}" placeholder="Price" required/>
     </div>
+     <div class="form-group">
+         <label>Discount:</label>
+        <input type="number" th:field="*{discount}" placeholder="Discount %" required />
+        </div>
 
     <!-- Quantity -->
     <div class="form-group">

@@ -5,17 +5,10 @@
   <title>Shopping Cart</title>
   <link rel="stylesheet" th:href="@{/style.css}">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f1f3f6;
-      margin: 0;
-      padding: 0;
-    }
-
     .cart-wrapper {
       display: flex;
       max-width: 1200px;
-      margin: 30px auto;
+      margin:auto;
       gap: 20px;
     }
 
@@ -185,10 +178,11 @@
 
    <form th:action="@{/order/getCheckoutPage}" method="get">
   <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-  <button type="submit" class="btn-order">Place Order</button>
+  <button type="submit" class="btn-order">Checkout</button>
 </form>
   </div>
 </div>
+<div th:replace="fragments/footer :: footer"></div>
 
 <!-- ✅ JavaScript -->
 <script>

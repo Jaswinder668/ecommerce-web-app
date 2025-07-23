@@ -33,5 +33,8 @@ public class ProductService {
 				.orElseThrow(()->new RuntimeException("Product Not Found"));
 		return product;
 	}
+	  public List<Product> searchProducts(String keyword) {
+	        return productRepository.findByNameContainingIgnoreCase(keyword);
+	    }
 
 }

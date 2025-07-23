@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Help | ShopVibe</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+      
+
+        .help-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .faq-section {
+            margin-top: 30px;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            margin-top: 15px;
+            color: #34495e;
+        }
+
+        .faq-answer {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+        }
+
+        .note-box {
+            margin-top: 30px;
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-left: 4px solid #8bc34a;
+        }
+    </style>
+</head>
+<body>
+  <div th:replace="fragments/navbar::navbar"></div>
+<div class="help-container">
+    <h1>Help Center</h1>
+    <p>Welcome to the ShopVibe Help Center. We're here to help you with any shopping or technical issues.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div>
+            <p class="faq-question">Q1: How do I place an order?</p>
+            <p class="faq-answer">Browse products, add them to your cart, and complete checkout with a payment method.</p>
+
+            <p class="faq-question">Q2: Can I cancel my order?</p>
+            <p class="faq-answer">Yes, orders can be canceled within 24 hours via the "My Orders" section.</p>
+
+            <p class="faq-question">Q3: How do I track my order?</p>
+            <p class="faq-answer">Go to the "My Orders" section to view your order status: Processing, Shipped, Delivered.</p>
+
+            <p class="faq-question">Q4: What payment methods are available?</p>
+            <p class="faq-answer">We support UPI, Debit/Credit Cards, Net Banking, and Cash on Delivery.</p>
+
+            <p class="faq-question">Q5: How do I request a return or refund?</p>
+            <p class="faq-answer">Click on "Return" in your order details and follow the steps. Refunds are processed within 5–7 days.</p>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h2>Need More Help?</h2>
+        <p>Email us at: <strong>support@shopvibe.com</strong></p>
+        <p>Call us: <strong>+91-9876543210</strong></p>
+        <p>Support hours: <strong>10:00 AM to 6:00 PM (Mon–Sat)</strong></p>
+    </div>
+
+    <div class="note-box">
+        <h3>Note for Reviewers/Interviewers:</h3>
+        <p>This project is developed by a Java Full Stack Fresher using:</p>
+        <ul>
+            <li>Spring Boot (Java Backend)</li>
+            <li>Thymeleaf Template Engine</li>
+            <li>MySQL Database</li>
+            <li>REST APIs, MVC Pattern</li>
+        </ul>
+        <p>This Help page is part of a demonstration project and may not reflect live e-commerce policies.</p>
+    </div>
+</div>
+</body>
+</html>

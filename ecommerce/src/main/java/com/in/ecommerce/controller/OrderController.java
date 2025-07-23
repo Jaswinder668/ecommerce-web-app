@@ -47,8 +47,8 @@ public class OrderController {
     
     @GetMapping("/address")
     public String getAddressPage(Model model,Principal principal) {
-    	model.addAttribute("Address", new Address());
     	String name=principal.getName();
+    	model.addAttribute("Address", new Address());
     	User user=userRepository.findByEmail(name).get();
     	model.addAttribute("userid",user.getId());
     	return "checkout/address_page";
@@ -57,13 +57,16 @@ public class OrderController {
     
   
     @PostMapping("/save_address")
-    public String saveAddress(@ModelAttribute Address address, Model model) {
+    public String saveAddress(@ModelAttribute("Address")Address address, Model model) {
     	
     	addressRepository.save(address);
     	return "redirect:/order/getCheckoutPage";
     }
+    
+    
+    
     @GetMapping("/addressDeleteById/{id}")
-    public String deleteAddressByid(@PathVariable Long id) {
+    public String deleteAddressByid(@PathVariable("id") Long id) {
     	addressRepository.deleteById(id);
     	return "redirect:/order/getCheckoutPage";
     }
@@ -80,9 +83,39 @@ public class OrderController {
         }
         
         List<Orders> orders = orderRepository.findByUser(user);
+        
+        for (Orders order : orders) {
+            for (OrderItems item : order.getItems()) {
+                System.out.println("Image: " + item.getProduct().getImageUrl());
+            }
+        }
+
+        
         model.addAttribute("orders", orders);
         return "orders"; // 🔁 HTML page: orders.html
     }
+
+   
+    @GetMapping("/cancel/{id}")
+    public String cancelOrder(@PathVariable("id") Long orderId, RedirectAttributes redirectAttributes) {
+        Optional<Orders> optionalOrder = orderRepository.findById(orderId);
+        
+        if (optionalOrder.isPresent()) {
+            Orders order = optionalOrder.get();
+
+            // Only allow cancel if NOT delivered or out for delivery
+            if (order.getStatus() != OrderStatus.DELIVERED && order.getStatus() != OrderStatus.OUTFORDELIVERY) {
+                orderRepository.delete(order);
+                redirectAttributes.addFlashAttribute("message", "Order cancelled successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "You cannot cancel a delivered or out-for-delivery order.");
+            }
+        }
+        return "redirect:/order/myorders";
+    }
+    
+    
+    
     
 
 
@@ -119,23 +152,9 @@ public class OrderController {
     
         return "checkout/checkoutPage"; // templates/checkout/checkoutPage.html
     }
-    @GetMapping("/cancel/{id}")
-    public String cancelOrder(@PathVariable("id") Long orderId, RedirectAttributes redirectAttributes) {
-        Optional<Orders> optionalOrder = orderRepository.findById(orderId);
-        
-        if (optionalOrder.isPresent()) {
-            Orders order = optionalOrder.get();
+    
 
-            // Only allow cancel if NOT delivered or out for delivery
-            if (order.getStatus() != OrderStatus.DELIVERED && order.getStatus() != OrderStatus.OUTFORDELIVERY) {
-                orderRepository.delete(order);
-                redirectAttributes.addFlashAttribute("message", "Order cancelled successfully!");
-            } else {
-                redirectAttributes.addFlashAttribute("error", "You cannot cancel a delivered or out-for-delivery order.");
-            }
-        }
-        return "redirect:/order/myorders";
-    }
+   
 
 }
 

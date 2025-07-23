@@ -24,6 +24,9 @@ public class Product {
 	private String description;
 	private String imageUrl;
 	private  int stock;
+	private double mrp;
+    private String brand;
+    private int discount;
 	
 
 	  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -41,6 +44,12 @@ public class Product {
 
 
 	
+	public String getBrand() {
+		return brand;
+	}
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
 	public List<OrderItems> getOrderItems() {
 		return orderItems;
 	}
@@ -66,6 +75,18 @@ public class Product {
 	
 	
 
+	public double getMrp() {
+		return mrp;
+	}
+	public void setMrp(double mrp) {
+		this.mrp = mrp;
+	}
+	public int getDiscount() {
+		return discount;
+	}
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
 	public Long getId() {
 		return id;
 	}
