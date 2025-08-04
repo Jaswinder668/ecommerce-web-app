@@ -10,11 +10,13 @@ It supports full **user flow** (login → product browse → cart → checkout �
 ### 🏠 Home Page
 Browse all products, search by name, and view by category.
 
+<img width="1812" height="828" alt="Screenshot 2025-08-04 211139" src="https://github.com/user-attachments/assets/992cccc4-2f35-4a48-b1e5-c356da03d7e7" />
+
 ![Home](screenshots/home.png)
 
 ### 🔍 Product Detail Page
 Click to view detailed information.
-
+<img width="1817" height="866" alt="Screenshot 2025-08-04 211226" src="https://github.com/user-attachments/assets/5bf04d83-2e5a-4ed0-a9a2-d4b42e67ea29" />
 ![Product Detail](screenshots/product-detail.png)
 
 ### 🛒 Cart Page
