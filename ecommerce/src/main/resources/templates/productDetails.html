@@ -101,7 +101,9 @@
 
     <div class="search-grid" th:if="${!#lists.isEmpty(products)}">
         <div class="search-product-card" th:each="product : ${products}">
+          <a th:href="@{/product/getproductbyid/{id}(id=${product.id})}">
             <img th:src="@{'/images/' + ${product.imageUrl}}" th:alt="${product.name}" />
+            </a>
 
             <h3 th:text="${product.name}">Product Name</h3>
             <p>Brand: <span th:text="${product.brand}">Brand</span></p>
