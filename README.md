@@ -11,38 +11,41 @@ It supports full **user flow** (login → product browse → cart → checkout �
 Browse all products, search by name, and view by category.
 
 <img width="1812" height="828" alt="Screenshot 2025-08-04 211139" src="https://github.com/user-attachments/assets/992cccc4-2f35-4a48-b1e5-c356da03d7e7" />
-
-![Home](screenshots/home.png)
+<img width="1830" height="767" alt="Screenshot 2025-08-04 211153" src="https://github.com/user-attachments/assets/bdbbf65e-13ff-40ab-b3ec-3814096c4edd" />
 
 ### 🔍 Product Detail Page
 Click to view detailed information.
 <img width="1817" height="866" alt="Screenshot 2025-08-04 211226" src="https://github.com/user-attachments/assets/5bf04d83-2e5a-4ed0-a9a2-d4b42e67ea29" />
-![Product Detail](screenshots/product-detail.png)
+
 
 ### 🛒 Cart Page
 Manage your cart items dynamically.
+<img width="1822" height="544" alt="Screenshot 2025-08-04 212413" src="https://github.com/user-attachments/assets/96bc4087-2545-40a0-8a71-0e898cd7a466" />
 
-![Cart](screenshots/cart.png)
+
 
 ### ✅ Checkout Page
 Confirm and place your order.
 
-![Checkout](screenshots/checkout.png)
+
 
 ### 📦 My Orders Page
 List of all orders placed by the user.
+<img width="1819" height="570" alt="Screenshot 2025-08-04 212430" src="https://github.com/user-attachments/assets/c33bf78a-bc08-4ddf-89be-e37c27d3a26a" />
 
-![Orders](screenshots/my-orders.png)
+
 
 ### 🔐 Login / Register
 Secure login and user registration.
+<img width="1808" height="919" alt="Screenshot 2025-08-04 211945" src="https://github.com/user-attachments/assets/858c2758-0bc8-426b-9505-d494fce89795" />
 
-![Login](screenshots/login.png)
 
 ### ⚙️ Admin Dashboard
 Manage products, orders, and users.
+<img width="1797" height="868" alt="Screenshot 2025-08-04 212320" src="https://github.com/user-attachments/assets/6205f17a-3df0-4d81-b738-99fc734b327f" />
+<img width="1844" height="810" alt="Screenshot 2025-08-04 212339" src="https://github.com/user-attachments/assets/e93e5835-5210-4903-b921-ee6f8e141195" />
+<img width="1678" height="741" alt="Screenshot 2025-08-04 212352" src="https://github.com/user-attachments/assets/e4e456d7-420a-4bad-8c8f-cc81e1c2e5c0" />
 
-![Admin](screenshots/admin.png)
 
 ---
 
